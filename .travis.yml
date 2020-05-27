@@ -35,9 +35,9 @@ jobs:
       before_install:
         - choco install git-lfs -y -f | echo "0" # choco fails but git-lfs is still installed
         - choco install ffmpeg
-        - dir C:\ProgramData\chocolatey\lib\ffmpeg\tools
-        - dir C:\ProgramData\chocolatey\lib\ffmpeg\
-        - setx /M PATH "C:\ProgramData\chocolatey\lib\ffmpeg\tools;%PATH%"
+        - dir C:ProgramData\chocolatey\lib\ffmpeg\tools
+        - dir C:ProgramData\chocolatey\lib\ffmpeg\
+        - setx /M PATH "C:ProgramData\chocolatey\lib\ffmpeg\tools;%PATH%"
   
       script:
         - cd gulp
