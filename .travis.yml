@@ -6,13 +6,18 @@ node_js:
 install:
   #- npm install -g npm@latest
   #- npm install -g yarn
-  - brew install ffmpeg
+  #- npm install wine-darwin@1.9.17-1
+  #- ./node_modules/.bin/wine hostname
+
+  - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
+
   - git lfs pull
   - yarn
   - cd electron && yarn
   - cd gulp && yarn
-  #- npm install wine-darwin@1.9.17-1
-  #- ./node_modules/.bin/wine hostname
+
+  # works
+  - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
   
 #before_script:
 #  - npm install electron
