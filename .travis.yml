@@ -9,6 +9,7 @@ install:
   - npm install wine-darwin@1.9.17-1
   - ./node_modules/.bin/wine hostname
   - npm install -g yarn
+  - yarn
 before_script:
   - npm install electron
 script: electron-packager . my-sample-app --all --asar --out=dist
