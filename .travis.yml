@@ -28,17 +28,19 @@ jobs:
         - yarn gulp build.standalone-prod
         - yarn gulp standalone.prepare
         - yarn gulp standalone.package.prod.linux64
+        - yarn gulp standalone.package.prod.linux32
 
     - name: "Standalone Windows"
       os: windows
       before_install:
-        - choco install git-lfs
+        - choco install git-lfs -y -f | echo "0"
         - choco install ffmpeg
       script:
         - cd gulp
         - yarn gulp build.standalone-prod
         - yarn gulp standalone.prepare
         - yarn gulp standalone.package.prod.win64
+        - yarn gulp standalone.package.prod.win32
 
 # shared
 install:
