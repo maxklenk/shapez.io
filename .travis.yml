@@ -33,8 +33,10 @@ jobs:
     - name: "Standalone Windows"
       os: windows
       before_install:
-        - choco install git-lfs -y -f | echo "0"
+        - choco install git-lfs -y -f
         - choco install ffmpeg
+        - set PATH=%PATH%;C:\ProgramData\chocolatey\lib\ffmpeg\tools
+        - dir C:\ProgramData\chocolatey\lib\ffmpeg\tools
       script:
         - cd gulp
         - yarn gulp build.standalone-prod
