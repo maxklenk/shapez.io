@@ -1,13 +1,9 @@
-# based on electron-packager before-install.sh
-os: osx
 language: node_js
-node_js:
-  - "10"
+  node_js:
+    - "10"
 cache: yarn
 
 install:
-  - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
-
   - git lfs install
   - git lfs pull
 
@@ -23,11 +19,17 @@ install:
   - yarn
   - cd ..
 
-  # works
-  - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
-  
-script: 
-  - cd gulp
-  - yarn gulp build.standalone-prod
-  - yarn gulp standalone.prepare
-  - yarn gulp standalone.package.prod.darwin64
+matrix:
+  include:
+    - name: "Standalone MacOS"
+      os: osx
+
+      before_install:
+        - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
+        - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
+
+      script: 
+        - cd gulp
+        - yarn gulp build.standalone-prod
+        - yarn gulp standalone.prepare
+        - yarn gulp standalone.package.prod.darwin64
