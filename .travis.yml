@@ -2,17 +2,21 @@
 os: osx
 language: node_js
 node_js:
-  - "6"
+  - "10"
 install:
-  - npm install -g npm@latest
-  - npm install -g electron-packager
-  - npm install wine-darwin@1.9.17-1
-  - ./node_modules/.bin/wine hostname
-  - npm install -g yarn
+  #- npm install -g npm@latest
+  #- npm install -g yarn
+  - brew install ffmpeg
+  - git lfs pull
   - yarn
-before_script:
-  - npm install electron
-script: electron-packager . my-sample-app --all --asar --out=dist
+  - cd electron && yarn
+  - cd gulp && yarn
+  #- npm install wine-darwin@1.9.17-1
+  #- ./node_modules/.bin/wine hostname
+  
+#before_script:
+#  - npm install electron
+script: cd gulp && yarn gulp main.standalone
 env:
   global:
     # prevent wine popup dialogs about installing additional packages
