@@ -29,10 +29,10 @@ jobs:
         - yarn gulp standalone.prepare
         - yarn gulp standalone.package.prod.linux64
 
-    - name "Standalone Windows"
+    - name: "Standalone Windows"
       os: windows
       before_install:
-        # git lfs
+        - choco install git-lfs
         - choco install ffmpeg
       script:
         - cd gulp
