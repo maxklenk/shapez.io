@@ -3,12 +3,9 @@ os: osx
 language: node_js
 node_js:
   - "10"
-install:
-  #- npm install -g npm@latest
-  #- npm install -g yarn
-  #- npm install wine-darwin@1.9.17-1
-  #- ./node_modules/.bin/wine hostname
+cache: yarn
 
+install:
   - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
 
   - git lfs install
@@ -29,15 +26,8 @@ install:
   # works
   - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
   
-#before_script:
-#  - npm install electron
 script: 
   - cd gulp
   - yarn gulp build.standalone-prod
   - yarn gulp standalone.prepare
   - yarn gulp standalone.package.prod.darwin64
-env:
-  global:
-    # prevent wine popup dialogs about installing additional packages
-    #- WINEDLLOVERRIDES="mscoree,mshtml="
-    #- WINEDEBUG="-all"
