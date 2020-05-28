@@ -124,7 +124,6 @@ jobs:
             - ffmpeg
             - wine
         artifacts:
-          debug: true
           paths:
             - ./tmp_standalone_files/shapez.io-standalone-win32-x64/shapezio-windows.zip
       cache:
@@ -155,7 +154,6 @@ jobs:
             - libavdevice-dev
             - ffmpeg
         artifacts:
-          debug: true
           paths:
             - ./tmp_standalone_files/shapez.io-standalone-linux-x64/shapezio-linux.zip
       cache:
