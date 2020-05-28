@@ -160,3 +160,8 @@ install:
   - cd gulp 
   - yarn
   - cd ..
+
+addons:
+  artifacts:
+    paths:
+      - $HOME/tmp_standalone_files/shapez.io-*
