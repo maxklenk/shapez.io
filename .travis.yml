@@ -12,6 +12,7 @@ jobs:
   # jobs which have to succeed
   include:
     # OS: MAC
+    ## -> build darwin
     - name: "Standalone MacOS on MacOS"
       os: osx
       before_install:
@@ -23,18 +24,21 @@ jobs:
         - yarn gulp standalone.prepare
         - yarn gulp standalone.package.prod.darwin64
 
-    #- name: "Standalone Windows on MacOS"
-    #  os: osx
-    #  before_install:
-    #    - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
-    #    - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
-    #    - HOMEBREW_NO_AUTO_UPDATE=1 brew cask install wine-stable
-    #  script:
-    #    - cd gulp
-    #    - yarn gulp build.standalone-prod
-    #    - yarn gulp standalone.prepare
-    #    - yarn gulp standalone.package.prod.win64
+    ## -> build win (stalls when accessing wine)
+    - name: "Standalone Windows on MacOS"
+      os: osx
+      before_install:
+        - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
+        - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
+        - HOMEBREW_NO_AUTO_UPDATE=1 brew cask install wine-stable
+      script:
+        - cd gulp
+        - yarn gulp build.standalone-prod
+        - yarn gulp standalone.prepare
+        - yarn gulp standalone.package.prod.win64
+        - yarn gulp standalone.package.prod.win32
 
+    ## -> build linux
     - name: "Standalone Linux on MacOS"
       os: osx
       before_install:
@@ -48,18 +52,10 @@ jobs:
         - yarn gulp standalone.package.prod.linux32
 
     # OS: LINUX
-    - name: "Standalone Linux on Linux"
-      os: linux
-      before_install:
-        # git lfs is already installed
-        - sudo apt-get install libavformat-dev libavfilter-dev libavdevice-dev ffmpeg
-      script: 
-        - cd gulp
-        - yarn gulp build.standalone-prod
-        - yarn gulp standalone.prepare
-        - yarn gulp standalone.package.prod.linux64
-        - yarn gulp standalone.package.prod.linux32
+    ## -> build darwin
+    ## not possible
 
+    ## -> build linux
     - name: "Standalone Windows on Linux"
       os: linux
       before_install:
@@ -73,7 +69,41 @@ jobs:
         - yarn gulp standalone.package.prod.win64
         - yarn gulp standalone.package.prod.win32
 
+    ## -> build win
+    - name: "Standalone Linux on Linux"
+      os: linux
+      before_install:
+        # git lfs is already installed
+        - sudo apt-get install libavformat-dev libavfilter-dev libavdevice-dev ffmpeg
+      script: 
+        - cd gulp
+        - yarn gulp build.standalone-prod
+        - yarn gulp standalone.prepare
+        - yarn gulp standalone.package.prod.linux64
+        - yarn gulp standalone.package.prod.linux32
+
     # OS: WINDOWS
+    ## -> build darwin
+    ## not possible
+
+    ## -> build linux (fails using ffmpeg)
+    - name: "Standalone Linux on Windows"
+      os: windows
+      env: YARN_GPG=no
+      before_install:
+        - choco install git-lfs -y -f || echo "0" # choco fails but git-lfs is still installed
+        - choco install ffmpeg
+        - export PATH=/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/bin:$PATH
+  
+      script:
+        - cd gulp
+        - yarn gulp build.standalone-prod || travis_terminate 1
+        - yarn gulp standalone.prepare
+        - yarn gulp standalone.package.prod.linux64
+        - yarn gulp standalone.package.prod.linux32
+        - travis_terminate 0
+
+    ## -> build win (fails using ffmpeg)
     - name: "Standalone Windows on Windows"
       os: windows
       env: YARN_GPG=no
@@ -95,9 +125,10 @@ jobs:
 
   # optional jobs which may fail
   allow_failures:
-    - name: "Standalone Windows on Windows"
     - name: "Standalone Windows on MacOS"
-
+    - name: "Standalone Linux on Windows"
+    - name: "Standalone Windows on Windows"
+    
 # shared
 install:
   - git lfs install
