@@ -27,13 +27,11 @@ jobs:
     ## -> build win (stalls when accessing wine)
     - name: "Standalone Windows on MacOS"
       os: osx
-      addons:
-        homebrew:
-          packages:
-            - git-lfs
-            - ffmpeg
-            - wine
-          #update: true
+      before_install:
+        - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
+        - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
+        - HOMEBREW_NO_AUTO_UPDATE=1 brew install wine
+        #- HOMEBREW_NO_AUTO_UPDATE=1 brew cask install wine-stable
       script:
         - cd gulp
         - yarn gulp build.standalone-prod
@@ -124,7 +122,6 @@ jobs:
         - choco install ffmpeg
         - choco install wget
         - export PATH=/C/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/bin:$PATH
-        - path
         - echo $PATH
         - wget https://github.com/moiamond/docker-ffmpeg-base-windowsservercore/raw/master/System32/avicap32.dll -P /C/Windows/System32/
         - wget https://github.com/moiamond/docker-ffmpeg-base-windowsservercore/raw/master/System32/msvfw32.dll -P /C/Windows/System32/
