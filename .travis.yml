@@ -15,14 +15,9 @@ jobs:
     ## -> build darwin
     - name: "Standalone MacOS on MacOS"
       os: osx
-      addons:
-        homebrew:
-          packages:
-            - git-lfs
-            - ffmpeg
-      #before_install:
-      #  - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
-      #  - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
+      before_install:
+        - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
+        - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
       script: 
         - cd gulp
         - yarn gulp build.standalone-prod
@@ -36,7 +31,6 @@ jobs:
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
         - HOMEBREW_NO_AUTO_UPDATE=1 brew cask install wine-stable
-        - wine
       script:
         - cd gulp
         - yarn gulp build.standalone-prod
@@ -47,14 +41,9 @@ jobs:
     ## -> build linux
     - name: "Standalone Linux on MacOS"
       os: osx
-      addons:
-        homebrew:
-          packages:
-            - git-lfs
-            - ffmpeg
-      #before_install:
-      #  - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
-      #  - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
+      before_install:
+        - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
+        - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
       script: 
         - cd gulp
         - yarn gulp build.standalone-prod
@@ -105,7 +94,7 @@ jobs:
     ## -> build darwin
     ## not possible
 
-    ## -> build linux (fails using ffmpeg)
+    ## -> build linux
     - name: "Standalone Linux on Windows"
       os: windows
       env: YARN_GPG=no
@@ -123,7 +112,7 @@ jobs:
         - yarn gulp standalone.package.prod.linux32
         - travis_terminate 0
 
-    ## -> build win (fails using ffmpeg)
+    ## -> build win
     - name: "Standalone Windows on Windows"
       os: windows
       env: YARN_GPG=no
@@ -148,8 +137,6 @@ jobs:
   # optional jobs which may fail
   allow_failures:
     - name: "Standalone Windows on MacOS"
-    - name: "Standalone Linux on Windows"
-    - name: "Standalone Windows on Windows"
     
 # shared
 install:
