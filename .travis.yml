@@ -24,6 +24,7 @@ jobs:
         - yarn gulp build.standalone-prod
         - yarn gulp standalone.prepare
         - yarn gulp standalone.package.prod.darwin64
+        - cd ..
 
     ## -> build win
     - name: "Standalone Windows on MacOS"
@@ -42,6 +43,7 @@ jobs:
         - yarn gulp standalone.prepare
         - yarn gulp standalone.package.prod.win64
         - yarn gulp standalone.package.prod.win32
+        - cd ..
 
     ## -> build linux
     - name: "Standalone Linux on MacOS"
@@ -56,6 +58,7 @@ jobs:
         - yarn gulp standalone.prepare
         - yarn gulp standalone.package.prod.linux64
         - yarn gulp standalone.package.prod.linux32
+        - cd ..
 
     # OS: LINUX
     ## -> build darwin
@@ -78,6 +81,7 @@ jobs:
         - yarn gulp standalone.prepare
         - yarn gulp standalone.package.prod.win64
         - yarn gulp standalone.package.prod.win32
+        - cd ..
 
     ## -> build linux
     - name: "Standalone Linux on Linux"
@@ -95,6 +99,7 @@ jobs:
         - yarn gulp standalone.prepare
         - yarn gulp standalone.package.prod.linux64
         - yarn gulp standalone.package.prod.linux32
+        - cd ..
 
     # OS: WINDOWS
     ## -> build darwin
@@ -116,7 +121,7 @@ jobs:
         - yarn gulp standalone.prepare
         - yarn gulp standalone.package.prod.linux64
         - yarn gulp standalone.package.prod.linux32
-        - travis_terminate 0
+        - cd ..
 
     ## -> build win
     - name: "Standalone Windows on Windows"
@@ -135,7 +140,7 @@ jobs:
         - yarn gulp standalone.prepare
         - yarn gulp standalone.package.prod.win64
         - yarn gulp standalone.package.prod.win32
-        - travis_terminate 0
+        - cd ..
 
   # mark build as finished even if "allow_failures" are still running
   fast_finish: true
@@ -164,4 +169,4 @@ install:
 addons:
   artifacts:
     paths:
-      - $HOME/tmp_standalone_files/shapez.io-*
+      - tmp_standalone_files/shapez.io-*
