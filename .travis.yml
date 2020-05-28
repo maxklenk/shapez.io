@@ -13,7 +13,7 @@ jobs:
   include:
     # OS: MAC
     ## -> build darwin
-    - name: "Standalone MacOS on MacOS"
+    - name: "MacOS: Standalone MacOS"
       os: osx
       osx_image: xcode11.3
       before_install:
@@ -26,7 +26,6 @@ jobs:
         - yarn gulp standalone.package.prod.darwin64
         - cd ..
       after_success:
-        - ls tmp_standalone_files
         - cd tmp_standalone_files/shapez.io-standalone-darwin-x64
         - zip -rX shapezio-mac.zip .
         - cd ../..
@@ -36,7 +35,7 @@ jobs:
             - ./tmp_standalone_files/shapez.io-standalone-darwin-x64/shapezio-mac.zip
 
     ## -> build win
-    - name: "Standalone Windows on MacOS"
+    - name: "MacOS: Standalone Windows"
       os: osx
       osx_image: xcode11.3
       before_install:
@@ -54,7 +53,6 @@ jobs:
         - yarn gulp standalone.package.prod.win32
         - cd ..
       after_success:
-        - ls tmp_standalone_files
         - cd tmp_standalone_files/shapez.io-standalone-win32-x64
         - zip -rX shapezio-windows.zip .
         - cd ../..
@@ -64,7 +62,7 @@ jobs:
             - ./tmp_standalone_files/shapez.io-standalone-win32-x64/shapezio-windows.zip
 
     ## -> build linux
-    - name: "Standalone Linux on MacOS"
+    - name: "MacOS: Standalone Linux"
       os: osx
       osx_image: xcode11.3
       before_install:
@@ -78,7 +76,6 @@ jobs:
         - yarn gulp standalone.package.prod.linux32
         - cd ..
       after_success:
-        - ls tmp_standalone_files
         - cd tmp_standalone_files/shapez.io-standalone-linux-x64
         - zip -rX shapezio-linux.zip .
         - cd ../..
@@ -92,7 +89,7 @@ jobs:
     ## not possible
 
     ## -> build win
-    - name: "Standalone Windows on Linux"
+    - name: "Linux: Standalone Windows"
       os: linux
       addons:
         apt:
@@ -103,6 +100,7 @@ jobs:
             - ffmpeg
             - wine
         artifacts:
+          debug: true
           paths:
             - ./tmp_standalone_files/shapez.io-standalone-win32-x64/shapezio-windows.zip
       script: 
@@ -113,13 +111,12 @@ jobs:
         - yarn gulp standalone.package.prod.win32
         - cd ..
       after_success:
-        - ls tmp_standalone_files
         - cd tmp_standalone_files/shapez.io-standalone-win32-x64
         - zip -rX shapezio-windows.zip .
         - cd ../..
 
     ## -> build linux
-    - name: "Standalone Linux on Linux"
+    - name: "Linux: Standalone Linux"
       os: linux
       addons:
         apt:
@@ -129,6 +126,7 @@ jobs:
             - libavdevice-dev
             - ffmpeg
         artifacts:
+          debug: true
           paths:
             - ./tmp_standalone_files/shapez.io-standalone-linux-x64/shapezio-linux.zip
       script: 
@@ -139,7 +137,6 @@ jobs:
         - yarn gulp standalone.package.prod.linux32
         - cd ..
       after_success:
-        - ls tmp_standalone_files
         - cd tmp_standalone_files/shapez.io-standalone-linux-x64
         - zip -rX shapezio-linux.zip .
         - cd ../..
@@ -148,38 +145,8 @@ jobs:
     ## -> build darwin
     ## not possible
 
-    ## -> build linux
-    - name: "Standalone Linux on Windows"
-      os: windows
-      env: YARN_GPG=no
-      before_install:
-        - choco install git-lfs -y -f || echo "0" # choco fails but git-lfs is still installed
-        - choco install ffmpeg
-        - choco install wget
-        - choco install zip
-        - export PATH=/C/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/bin:$PATH
-        - wget https://github.com/moiamond/docker-ffmpeg-base-windowsservercore/raw/master/System32/avicap32.dll -P /C/Windows/System32/
-        - wget https://github.com/moiamond/docker-ffmpeg-base-windowsservercore/raw/master/System32/msvfw32.dll -P /C/Windows/System32/
-      script:
-        - cd gulp
-        - yarn gulp build.standalone-prod || travis_terminate 1
-        - yarn gulp standalone.prepare
-        - yarn gulp standalone.package.prod.linux64
-        - yarn gulp standalone.package.prod.linux32
-        - cd ..
-      after_success:
-        - dir tmp_standalone_files
-        - cd tmp_standalone_files/shapez.io-standalone-linux-x64
-        - zip -rX shapezio-linux.zip .
-        - cd ../..
-      addons:
-        artifacts:
-          paths:
-            - ./tmp_standalone_files/shapez.io-standalone-linux-x64/shapezio-linux.zip
-
-
     ## -> build win
-    - name: "Standalone Windows on Windows"
+    - name: "Windows: Standalone Windows"
       os: windows
       env: YARN_GPG=no
       before_install:
@@ -198,7 +165,6 @@ jobs:
         - yarn gulp standalone.package.prod.win32
         - cd ..
       after_success:
-        - dir tmp_standalone_files
         - cd tmp_standalone_files/shapez.io-standalone-win32-x64
         - zip -rX shapezio-windows.zip .
         - cd ../..
@@ -206,6 +172,34 @@ jobs:
         artifacts:
           paths:
             - ./tmp_standalone_files/shapez.io-standalone-win32-x64/shapezio-windows.zip
+
+    ## -> build linux
+    - name: "Windows: Standalone Linux"
+      os: windows
+      env: YARN_GPG=no
+      before_install:
+        - choco install git-lfs -y -f || echo "0" # choco fails but git-lfs is still installed
+        - choco install ffmpeg
+        - choco install wget
+        - choco install zip
+        - export PATH=/C/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/bin:$PATH
+        - wget https://github.com/moiamond/docker-ffmpeg-base-windowsservercore/raw/master/System32/avicap32.dll -P /C/Windows/System32/
+        - wget https://github.com/moiamond/docker-ffmpeg-base-windowsservercore/raw/master/System32/msvfw32.dll -P /C/Windows/System32/
+      script:
+        - cd gulp
+        - yarn gulp build.standalone-prod || travis_terminate 1
+        - yarn gulp standalone.prepare
+        - yarn gulp standalone.package.prod.linux64
+        - yarn gulp standalone.package.prod.linux32
+        - cd ..
+      after_success:
+        - cd tmp_standalone_files/shapez.io-standalone-linux-x64
+        - zip -rX shapezio-linux.zip .
+        - cd ../..
+      addons:
+        artifacts:
+          paths:
+            - ./tmp_standalone_files/shapez.io-standalone-linux-x64/shapezio-linux.zip
 
   # mark build as finished even if "allow_failures" are still running
   fast_finish: true
