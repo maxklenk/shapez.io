@@ -22,6 +22,18 @@ jobs:
         - yarn gulp standalone.prepare
         - yarn gulp standalone.package.prod.darwin64
 
+     - name: "Standalone Win on MacOS"
+      os: osx
+      before_install:
+        - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
+        - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
+        - HOMEBREW_NO_AUTO_UPDATE=1 brew cask install wine-stable
+      script: 
+        - cd gulp
+        - yarn gulp build.standalone-prod
+        - yarn gulp standalone.prepare
+        - yarn gulp standalone.package.prod.win64
+
     - name: "Standalone Linux"
       os: linux
       before_install:
@@ -36,7 +48,7 @@ jobs:
     - name: "Standalone Windows"
       os: windows
       before_install:
-        - choco install git-lfs -y -f | echo "0" # choco fails but git-lfs is still installed
+        - choco install git-lfs -y -f || echo "0" # choco fails but git-lfs is still installed
         - choco install ffmpeg
         - export PATH=/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/bin:$PATH
   
