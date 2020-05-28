@@ -11,7 +11,8 @@ jobs:
 
   # jobs which have to succeed
   include:
-    - name: "Standalone MacOS"
+    # OS: MAC
+    - name: "Standalone MacOS on MacOS"
       os: osx
       before_install:
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
@@ -22,19 +23,32 @@ jobs:
         - yarn gulp standalone.prepare
         - yarn gulp standalone.package.prod.darwin64
 
-    - name: "Standalone Win on MacOS"
+    #- name: "Standalone Windows on MacOS"
+    #  os: osx
+    #  before_install:
+    #    - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
+    #    - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
+    #    - HOMEBREW_NO_AUTO_UPDATE=1 brew cask install wine-stable
+    #  script:
+    #    - cd gulp
+    #    - yarn gulp build.standalone-prod
+    #    - yarn gulp standalone.prepare
+    #    - yarn gulp standalone.package.prod.win64
+
+    - name: "Standalone Linux on MacOS"
       os: osx
       before_install:
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
-        - HOMEBREW_NO_AUTO_UPDATE=1 brew cask install wine-stable
       script: 
         - cd gulp
         - yarn gulp build.standalone-prod
         - yarn gulp standalone.prepare
-        - yarn gulp standalone.package.prod.win64
+        - yarn gulp standalone.package.prod.linux64
+        - yarn gulp standalone.package.prod.linux32
 
-    - name: "Standalone Linux"
+    # OS: LINUX
+    - name: "Standalone Linux on Linux"
       os: linux
       before_install:
         # git lfs is already installed
@@ -45,8 +59,8 @@ jobs:
         - yarn gulp standalone.prepare
         - yarn gulp standalone.package.prod.linux64
         - yarn gulp standalone.package.prod.linux32
-    
-    - name: "Standalone Win on Linux"
+
+    - name: "Standalone Windows on Linux"
       os: linux
       before_install:
         # git lfs is already installed
@@ -58,9 +72,11 @@ jobs:
         - yarn gulp standalone.prepare
         - yarn gulp standalone.package.prod.win64
         - yarn gulp standalone.package.prod.win32
-            
-    - name: "Standalone Windows"
+
+    # OS: WINDOWS
+    - name: "Standalone Windows on Windows"
       os: windows
+      env: YARN_GPG=no
       before_install:
         - choco install git-lfs -y -f || echo "0" # choco fails but git-lfs is still installed
         - choco install ffmpeg
@@ -79,8 +95,8 @@ jobs:
 
   # optional jobs which may fail
   allow_failures:
-    - name: "Standalone Windows"
-      os: windows
+    - name: "Standalone Windows on Windows"
+    - name: "Standalone Windows on MacOS"
 
 # shared
 install:
