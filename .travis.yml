@@ -27,10 +27,13 @@ jobs:
     ## -> build win (stalls when accessing wine)
     - name: "Standalone Windows on MacOS"
       os: osx
-      before_install:
-        - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
-        - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
-        - HOMEBREW_NO_AUTO_UPDATE=1 brew cask install wine-stable
+      addons:
+        homebrew:
+          packages:
+            - git-lfs
+            - ffmpeg
+            - wine
+          #update: true
       script:
         - cd gulp
         - yarn gulp build.standalone-prod
@@ -55,13 +58,21 @@ jobs:
     ## -> build darwin
     ## not possible
 
-    ## -> build linux
+    ## -> build win
     - name: "Standalone Windows on Linux"
       os: linux
-      before_install:
-        # git lfs is already installed
-        - sudo apt-get install libavformat-dev libavfilter-dev libavdevice-dev ffmpeg
-        - sudo apt-get install wine
+      addons:
+        apt:
+          packages:
+            - libavformat-dev
+            - libavfilter-dev
+            - libavdevice-dev
+            - ffmpeg
+            - wine
+      #before_install:
+      #  # git lfs is already installed
+      #  - sudo apt-get install libavformat-dev libavfilter-dev libavdevice-dev ffmpeg
+      #  - sudo apt-get install wine
       script: 
         - cd gulp
         - yarn gulp build.standalone-prod
@@ -69,7 +80,7 @@ jobs:
         - yarn gulp standalone.package.prod.win64
         - yarn gulp standalone.package.prod.win32
 
-    ## -> build win
+    ## -> build linux
     - name: "Standalone Linux on Linux"
       os: linux
       before_install:
@@ -111,12 +122,12 @@ jobs:
       before_install:
         - choco install git-lfs -y -f || echo "0" # choco fails but git-lfs is still installed
         - choco install ffmpeg
-        - dir /C/ProgramData/chocolatey/lib/ffmpeg/
-        - dir /C/ProgramData/chocolatey/lib/ffmpeg/tools
-        - dir /C/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg
-        - dir /C/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/bin
+        - choco install wget
         - export PATH=/C/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/bin:$PATH
-        - echo PATH
+        - path
+        - echo $PATH
+        - wget https://github.com/moiamond/docker-ffmpeg-base-windowsservercore/raw/master/System32/avicap32.dll -P /C/Windows/System32/
+        - wget https://github.com/moiamond/docker-ffmpeg-base-windowsservercore/raw/master/System32/msvfw32.dll -P /C/Windows/System32/
         - ffmpeg
 
       script:
