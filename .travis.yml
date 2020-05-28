@@ -33,8 +33,8 @@ jobs:
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
         - HOMEBREW_NO_AUTO_UPDATE=1 brew cask install wine-stable
         # prevent Wine popup dialogs about installing additional packages
-        - echo 'export WINEDLLOVERRIDES="mscoree,mshtml="' >> $BASH_ENV
-        - echo 'export WINEDEBUG="-all"' >> $BASH_ENV
+        - export WINEDLLOVERRIDES="mscoree,mshtml="
+        - export WINEDEBUG="-all"
       script:
         - cd gulp
         - yarn gulp build.standalone-prod
