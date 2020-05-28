@@ -82,6 +82,13 @@ jobs:
         - yarn gulp standalone.package.prod.win64
         - yarn gulp standalone.package.prod.win32
         - cd ..
+      addons:
+        artifacts:
+          s3_region: "us-west-1"
+          debug: true
+          paths:
+            - ./*
+
 
     ## -> build linux
     - name: "Standalone Linux on Linux"
@@ -168,5 +175,7 @@ install:
 
 addons:
   artifacts:
+    s3_region: "us-west-1"
+    debug: true
     paths:
-      - tmp_standalone_files/shapez.io-*
+      - ./tmp_standalone_files/shapez.io-*
