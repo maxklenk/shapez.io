@@ -45,6 +45,20 @@ jobs:
         - yarn gulp standalone.prepare
         - yarn gulp standalone.package.prod.linux64
         - yarn gulp standalone.package.prod.linux32
+    
+    - name: "Standalone Win on Linux"
+      os: linux
+      before_install:
+        # git lfs is already installed
+        - sudo apt-get install libavformat-dev libavfilter-dev libavdevice-dev ffmpeg
+        - sudo apt-get install wine
+      script: 
+        - cd gulp
+        - yarn gulp build.standalone-prod
+        - yarn gulp standalone.prepare
+        - yarn gulp standalone.package.prod.win64
+        - yarn gulp standalone.package.prod.win32
+            
     - name: "Standalone Windows"
       os: windows
       before_install:
