@@ -15,6 +15,7 @@ jobs:
     ## -> build darwin
     - name: "Standalone MacOS on MacOS"
       os: osx
+      osx_image: xcode11.3
       before_install:
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
@@ -24,7 +25,7 @@ jobs:
         - yarn gulp standalone.prepare
         - yarn gulp standalone.package.prod.darwin64
 
-    ## -> build win (stalls when accessing wine)
+    ## -> build win
     - name: "Standalone Windows on MacOS"
       os: osx
       osx_image: xcode11.3
@@ -45,6 +46,7 @@ jobs:
     ## -> build linux
     - name: "Standalone Linux on MacOS"
       os: osx
+      osx_image: xcode11.3
       before_install:
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
@@ -139,8 +141,8 @@ jobs:
   fast_finish: true
 
   # optional jobs which may fail
-  allow_failures:
-    - name: "Standalone Windows on MacOS"
+  #allow_failures:
+  #  - name: ""
     
 # shared
 install:
