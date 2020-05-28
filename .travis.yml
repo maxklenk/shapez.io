@@ -25,6 +25,10 @@ jobs:
         - yarn gulp standalone.prepare
         - yarn gulp standalone.package.prod.darwin64
         - cd ..
+      addons:
+        artifacts:
+          paths:
+            - ./tmp_standalone_files/shapez.io-standalone-darwin-x64/shapez.io-standalone.app
 
     ## -> build win
     - name: "Standalone Windows on MacOS"
@@ -75,6 +79,10 @@ jobs:
             - libavdevice-dev
             - ffmpeg
             - wine
+        artifacts:
+          paths:
+            - ./tmp_standalone_files/shapez.io-standalone-win32-x64/shapez.io-standalone.app
+            - ./tmp_standalone_files/shapez.io-standalone-win32-ia32/shapez.io-standalone.app
       script: 
         - cd gulp
         - yarn gulp build.standalone-prod || travis_terminate 1
@@ -93,6 +101,10 @@ jobs:
             - libavfilter-dev
             - libavdevice-dev
             - ffmpeg
+        artifacts:
+          paths:
+            - ./tmp_standalone_files/shapez.io-standalone-linux-x64/shapez.io-standalone.app
+            - ./tmp_standalone_files/shapez.io-standalone-linux-ia32/shapez.io-standalone.app
       script: 
         - cd gulp
         - yarn gulp build.standalone-prod || travis_terminate 1
