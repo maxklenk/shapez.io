@@ -15,9 +15,14 @@ jobs:
     ## -> build darwin
     - name: "Standalone MacOS on MacOS"
       os: osx
-      before_install:
-        - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
-        - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
+      addons:
+        homebrew:
+          packages:
+            - git-lfs
+            - ffmpeg
+      #before_install:
+      #  - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
+      #  - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
       script: 
         - cd gulp
         - yarn gulp build.standalone-prod
@@ -30,8 +35,8 @@ jobs:
       before_install:
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
-        - HOMEBREW_NO_AUTO_UPDATE=1 brew install wine
-        #- HOMEBREW_NO_AUTO_UPDATE=1 brew cask install wine-stable
+        - HOMEBREW_NO_AUTO_UPDATE=1 brew cask install wine-stable
+        - wine
       script:
         - cd gulp
         - yarn gulp build.standalone-prod
@@ -42,9 +47,14 @@ jobs:
     ## -> build linux
     - name: "Standalone Linux on MacOS"
       os: osx
-      before_install:
-        - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
-        - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
+      addons:
+        homebrew:
+          packages:
+            - git-lfs
+            - ffmpeg
+      #before_install:
+      #  - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
+      #  - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
       script: 
         - cd gulp
         - yarn gulp build.standalone-prod
@@ -67,10 +77,6 @@ jobs:
             - libavdevice-dev
             - ffmpeg
             - wine
-      #before_install:
-      #  # git lfs is already installed
-      #  - sudo apt-get install libavformat-dev libavfilter-dev libavdevice-dev ffmpeg
-      #  - sudo apt-get install wine
       script: 
         - cd gulp
         - yarn gulp build.standalone-prod
@@ -81,9 +87,13 @@ jobs:
     ## -> build linux
     - name: "Standalone Linux on Linux"
       os: linux
-      before_install:
-        # git lfs is already installed
-        - sudo apt-get install libavformat-dev libavfilter-dev libavdevice-dev ffmpeg
+      addons:
+        apt:
+          packages:
+            - libavformat-dev
+            - libavfilter-dev
+            - libavdevice-dev
+            - ffmpeg
       script: 
         - cd gulp
         - yarn gulp build.standalone-prod
@@ -102,9 +112,9 @@ jobs:
       before_install:
         - choco install git-lfs -y -f || echo "0" # choco fails but git-lfs is still installed
         - choco install ffmpeg
-        - export PATH=$PATH:";C:\ProgramData\chocolatey\lib\ffmpeg\tools\ffmpeg\bin"
-        #- export "PATH=/c/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/bin:$PATH"
-
+        - export PATH=/C/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/bin:$PATH
+        - wget https://github.com/moiamond/docker-ffmpeg-base-windowsservercore/raw/master/System32/avicap32.dll -P /C/Windows/System32/
+        - wget https://github.com/moiamond/docker-ffmpeg-base-windowsservercore/raw/master/System32/msvfw32.dll -P /C/Windows/System32/
       script:
         - cd gulp
         - yarn gulp build.standalone-prod || travis_terminate 1
@@ -122,11 +132,8 @@ jobs:
         - choco install ffmpeg
         - choco install wget
         - export PATH=/C/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/bin:$PATH
-        - echo $PATH
         - wget https://github.com/moiamond/docker-ffmpeg-base-windowsservercore/raw/master/System32/avicap32.dll -P /C/Windows/System32/
         - wget https://github.com/moiamond/docker-ffmpeg-base-windowsservercore/raw/master/System32/msvfw32.dll -P /C/Windows/System32/
-        - ffmpeg
-
       script:
         - cd gulp
         - yarn gulp build.standalone-prod || travis_terminate 1
