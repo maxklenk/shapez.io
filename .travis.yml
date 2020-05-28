@@ -16,6 +16,14 @@ jobs:
     - name: "MacOS: Standalone MacOS"
       os: osx
       osx_image: xcode11.3
+      cache:
+        yarn: true
+        directories:
+          - $HOME/Library/Caches/Homebrew
+          - ./gulp/node_modules
+          - ./electron/node_modules
+      before_cache:
+        - brew cleanup
       before_install:
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
@@ -38,6 +46,14 @@ jobs:
     - name: "MacOS: Standalone Windows"
       os: osx
       osx_image: xcode11.3
+      cache:
+        yarn: true
+        directories:
+          - $HOME/Library/Caches/Homebrew
+          - ./gulp/node_modules
+          - ./electron/node_modules
+      before_cache:
+        - brew cleanup
       before_install:
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
@@ -65,6 +81,14 @@ jobs:
     - name: "MacOS: Standalone Linux"
       os: osx
       osx_image: xcode11.3
+      cache:
+        yarn: true
+        directories:
+          - $HOME/Library/Caches/Homebrew
+          - ./gulp/node_modules
+          - ./electron/node_modules
+      before_cache:
+        - brew cleanup
       before_install:
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
@@ -103,6 +127,11 @@ jobs:
           debug: true
           paths:
             - ./tmp_standalone_files/shapez.io-standalone-win32-x64/shapezio-windows.zip
+      cache:
+        yarn: true
+        directories:
+          - ./gulp/node_modules
+          - ./electron/node_modules
       script: 
         - cd gulp
         - yarn gulp build.standalone-prod || travis_terminate 1
@@ -129,6 +158,11 @@ jobs:
           debug: true
           paths:
             - ./tmp_standalone_files/shapez.io-standalone-linux-x64/shapezio-linux.zip
+      cache:
+        yarn: true
+        directories:
+          - ./gulp/node_modules
+          - ./electron/node_modules
       script: 
         - cd gulp
         - yarn gulp build.standalone-prod || travis_terminate 1
@@ -149,6 +183,12 @@ jobs:
     - name: "Windows: Standalone Windows"
       os: windows
       env: YARN_GPG=no
+      cache:
+        yarn: true
+        directories:
+          - /C/ProgramData/chocolatey/lib/
+          - ./gulp/node_modules
+          - ./electron/node_modules
       before_install:
         - choco install git-lfs -y -f || echo "0" # choco fails but git-lfs is still installed
         - choco install ffmpeg
@@ -177,6 +217,12 @@ jobs:
     - name: "Windows: Standalone Linux"
       os: windows
       env: YARN_GPG=no
+      cache:
+        yarn: true
+        directories:
+          - /C/ProgramData/chocolatey/lib/
+          - ./gulp/node_modules
+          - ./electron/node_modules
       before_install:
         - choco install git-lfs -y -f || echo "0" # choco fails but git-lfs is still installed
         - choco install ffmpeg
