@@ -27,10 +27,14 @@ jobs:
     ## -> build win (stalls when accessing wine)
     - name: "Standalone Windows on MacOS"
       os: osx
+      osx_image: xcode11.3
       before_install:
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
         - HOMEBREW_NO_AUTO_UPDATE=1 brew cask install wine-stable
+        # prevent Wine popup dialogs about installing additional packages
+        - echo 'export WINEDLLOVERRIDES="mscoree,mshtml="' >> $BASH_ENV
+        - echo 'export WINEDEBUG="-all"' >> $BASH_ENV
       script:
         - cd gulp
         - yarn gulp build.standalone-prod
