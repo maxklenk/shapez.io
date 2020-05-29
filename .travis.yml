@@ -152,7 +152,7 @@ jobs:
       os: windows
       env: YARN_GPG=no
       before_install:
-        - choco install git-lfs -y -f || echo "0" # choco fails but git-lfs is still installed
+        - choco install git-lfs.install -y -f || echo "0" # choco fails but git-lfs is still installed
         - choco install ffmpeg
         - export PATH=/C/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/bin:$PATH
         - wget https://github.com/moiamond/docker-ffmpeg-base-windowsservercore/raw/master/System32/avicap32.dll -P /C/Windows/System32/
@@ -179,7 +179,7 @@ jobs:
       os: windows
       env: YARN_GPG=no
       before_install:
-        - choco install git-lfs -y -f || echo "0" # choco fails but git-lfs is still installed
+        - choco install git-lfs.install -y -f || echo "0" # choco fails but git-lfs is still installed
         - choco install ffmpeg
         - export PATH=/C/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/bin:$PATH
         - wget https://github.com/moiamond/docker-ffmpeg-base-windowsservercore/raw/master/System32/avicap32.dll -P /C/Windows/System32/
