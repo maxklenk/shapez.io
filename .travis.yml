@@ -16,14 +16,6 @@ jobs:
     - name: "MacOS: Standalone MacOS"
       os: osx
       osx_image: xcode11.3
-      cache:
-        yarn: true
-        directories:
-          - $HOME/Library/Caches/Homebrew
-          - ./gulp/node_modules
-          - ./electron/node_modules
-      before_cache:
-        - brew cleanup
       before_install:
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
@@ -34,6 +26,7 @@ jobs:
         - yarn gulp standalone.package.prod.darwin64
         - cd ..
       after_success:
+        - ls tmp_standalone_files
         - cd tmp_standalone_files/shapez.io-standalone-darwin-x64
         - zip -rX shapezio-mac.zip .
         - cd ../..
@@ -46,14 +39,6 @@ jobs:
     - name: "MacOS: Standalone Windows"
       os: osx
       osx_image: xcode11.3
-      cache:
-        yarn: true
-        directories:
-          - $HOME/Library/Caches/Homebrew
-          - ./gulp/node_modules
-          - ./electron/node_modules
-      before_cache:
-        - brew cleanup
       before_install:
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
@@ -69,6 +54,7 @@ jobs:
         - yarn gulp standalone.package.prod.win32
         - cd ..
       after_success:
+        - ls tmp_standalone_files
         - cd tmp_standalone_files/shapez.io-standalone-win32-x64
         - zip -rX shapezio-windows.zip .
         - cd ../..
@@ -81,14 +67,6 @@ jobs:
     - name: "MacOS: Standalone Linux"
       os: osx
       osx_image: xcode11.3
-      cache:
-        yarn: true
-        directories:
-          - $HOME/Library/Caches/Homebrew
-          - ./gulp/node_modules
-          - ./electron/node_modules
-      before_cache:
-        - brew cleanup
       before_install:
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install git-lfs
         - HOMEBREW_NO_AUTO_UPDATE=1 brew install ffmpeg
@@ -100,6 +78,7 @@ jobs:
         - yarn gulp standalone.package.prod.linux32
         - cd ..
       after_success:
+        - ls tmp_standalone_files
         - cd tmp_standalone_files/shapez.io-standalone-linux-x64
         - zip -rX shapezio-linux.zip .
         - cd ../..
@@ -126,11 +105,6 @@ jobs:
         artifacts:
           paths:
             - ./tmp_standalone_files/shapez.io-standalone-win32-x64/shapezio-windows.zip
-      cache:
-        yarn: true
-        directories:
-          - ./gulp/node_modules
-          - ./electron/node_modules
       script: 
         - cd gulp
         - yarn gulp build.standalone-prod || travis_terminate 1
@@ -156,11 +130,6 @@ jobs:
         artifacts:
           paths:
             - ./tmp_standalone_files/shapez.io-standalone-linux-x64/shapezio-linux.zip
-      cache:
-        yarn: true
-        directories:
-          - ./gulp/node_modules
-          - ./electron/node_modules
       script: 
         - cd gulp
         - yarn gulp build.standalone-prod || travis_terminate 1
@@ -169,6 +138,7 @@ jobs:
         - yarn gulp standalone.package.prod.linux32
         - cd ..
       after_success:
+        - ls tmp_standalone_files
         - cd tmp_standalone_files/shapez.io-standalone-linux-x64
         - zip -rX shapezio-linux.zip .
         - cd ../..
@@ -181,17 +151,9 @@ jobs:
     - name: "Windows: Standalone Windows"
       os: windows
       env: YARN_GPG=no
-      cache:
-        yarn: true
-        directories:
-          - /C/ProgramData/chocolatey/lib/
-          - ./gulp/node_modules
-          - ./electron/node_modules
       before_install:
         - choco install git-lfs -y -f || echo "0" # choco fails but git-lfs is still installed
         - choco install ffmpeg
-        - choco install wget
-        - choco install zip
         - export PATH=/C/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/bin:$PATH
         - wget https://github.com/moiamond/docker-ffmpeg-base-windowsservercore/raw/master/System32/avicap32.dll -P /C/Windows/System32/
         - wget https://github.com/moiamond/docker-ffmpeg-base-windowsservercore/raw/master/System32/msvfw32.dll -P /C/Windows/System32/
@@ -203,8 +165,9 @@ jobs:
         - yarn gulp standalone.package.prod.win32
         - cd ..
       after_success:
+        - dir tmp_standalone_files
         - cd tmp_standalone_files/shapez.io-standalone-win32-x64
-        - zip -rX shapezio-windows.zip .
+        - 7z a shapezio-windows.zip "*.*"
         - cd ../..
       addons:
         artifacts:
@@ -215,17 +178,9 @@ jobs:
     - name: "Windows: Standalone Linux"
       os: windows
       env: YARN_GPG=no
-      cache:
-        yarn: true
-        directories:
-          - /C/ProgramData/chocolatey/lib/
-          - ./gulp/node_modules
-          - ./electron/node_modules
       before_install:
         - choco install git-lfs -y -f || echo "0" # choco fails but git-lfs is still installed
         - choco install ffmpeg
-        - choco install wget
-        - choco install zip
         - export PATH=/C/ProgramData/chocolatey/lib/ffmpeg/tools/ffmpeg/bin:$PATH
         - wget https://github.com/moiamond/docker-ffmpeg-base-windowsservercore/raw/master/System32/avicap32.dll -P /C/Windows/System32/
         - wget https://github.com/moiamond/docker-ffmpeg-base-windowsservercore/raw/master/System32/msvfw32.dll -P /C/Windows/System32/
@@ -237,8 +192,9 @@ jobs:
         - yarn gulp standalone.package.prod.linux32
         - cd ..
       after_success:
+        - dir tmp_standalone_files
         - cd tmp_standalone_files/shapez.io-standalone-linux-x64
-        - zip -rX shapezio-linux.zip .
+        - 7z a shapezio-linux.zip "*.*"
         - cd ../..
       addons:
         artifacts:
@@ -249,9 +205,15 @@ jobs:
   fast_finish: true
 
   # optional jobs which may fail
-  #allow_failures:
-  #  - name: ""
-    
+  allow_failures:
+    - name: "MacOS: Standalone MacOS"
+    - name: "MacOS: Standalone Windows" 
+    - name: "MacOS: Standalone Linux"
+    - name: "Linux: Standalone Windows"
+    - name: "Linux: Standalone Linux"
+    - name: "Windows: Standalone Windows"
+    - name: "Windows: Standalone Linux"
+
 # shared
 install:
   - git lfs install
